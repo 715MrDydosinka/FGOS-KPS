@@ -46,17 +46,21 @@ Files structure:
 Packages format: .tar.xz (max. compression); pacman's .tar.zstd; .deb?
 
 Root packages:
-kps
-dinit
-linux-kernel
-glibc
-libstdcpp
-
+ - kps
+ - dinit
+ - linux-kernel
+ - glibc
+ - libstdcpp
 
 config.toml:
 ```
 Portable=yes   # Totally disables rootline and any system's root editing
 
-
 ```
 
+
+
+
+## License
+
+[Fuck your license](./LICENSE)
