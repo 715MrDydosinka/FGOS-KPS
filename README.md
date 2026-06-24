@@ -66,36 +66,54 @@ libc      = "2.43"
 libstdcpp = "*"     # * means latest
 dinit = { 
     version = "*", 
-    persisted = [     # list which files should be persisted
+    fork = "",         # identifier for forking. For example fork="test" will clone /fgos/pkgs/dinit/5.1 into /fgos/pkgs/dinit/5.1-test and will use it. For editing package.
+    persisted = [       # list which files should be persisted
         "/etc/config"   # copy /etc/config from original package into /fgos/pkgs/dinit/persisted/
-    ]
+    ],
+    rules = [
+                        # rules for linking
+    ],
 }
 gcc       = "*"
 coreutils = ""
 
 ```
 Files in /fgos/pkgs/<pkg>/persisted directory overrides any package's original files.
+
 .../persisted/<structure> mimics original package structrure
+
+If DIR-MD5 != real md5 && fork == null =>
+    notice user
+    set fork="<random>"
+    update all worlds with <pkg>.fork="<random>"
 
 
 ## Package Core
 
-.Content
-```
-[FILES]
-./bin/vim
-./bin/vimtutor
-./bin/xxd
+.Content.toml
+```toml
+Files = [
+/bin/vim
+/bin/vimtutor
+/bin/xxd
+]
 
-[LINKS]
-./bin/ex -> vim
-./bin/rview -> vim
-./bin/rvim -> vim
-./bin/vimdiff -> vim
+Links = [
+
+    [ "/bin/ex", "/bin/vim" ],
+    [ "/bin/rview", "/bin/vim" ],
+    [ "/bin/rvim", "/bin/vim"],
+    [ "/bin/vimdiff", "/bin/vim" ]
+]
+
+Rules = [
+    [ "/bin/", "/sbin/" ] # All files in /bin of packages will be linked into /sbin in system
+]
+
 ```
 
 .Package
-```
+```toml
 [PACKAGE]
 NAME="vim"
 VERSION="9.11"
@@ -104,7 +122,10 @@ MAINTAINER="Hlupa"
 BUILD_DATE="21.06.2026"
 BUILD_TIME="01:36"
 
+DIR_MD5="338ebe4676e7834cc0d3530e51f2228d"
+
 [DEPENDS]
+
 libc6   >= "2.15"
 ncurses =  "*"
 ```
